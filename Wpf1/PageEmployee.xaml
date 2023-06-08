@@ -1,0 +1,70 @@
+﻿<Page x:Class="Wpf1.PageEmployee"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Wpf1"
+      xmlns:command="clr-namespace:Wpf1.Commands"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="PageEmployee">
+
+
+    <Page.CommandBindings>
+        <CommandBinding Command="Undo"
+Executed="UndoCommandBinding_Executed"
+CanExecute="EditCommandBinding_CanExecute" />
+    </Page.CommandBindings>
+
+
+
+    <Grid>
+        <StackPanel>
+            <Menu>
+                <MenuItem Header="Действие" BorderThickness="3">
+                    <MenuItem Header="Отменить" Command="Undo"></MenuItem>
+                    <Separator></Separator>
+                    <MenuItem Header="Создать" ></MenuItem>
+                    <MenuItem Header="Редактировать"></MenuItem>
+                    <MenuItem Header="Сохранить" ></MenuItem>
+                    <MenuItem Header="Найти" />
+                    <Separator></Separator>
+                    <MenuItem Header="Удалить" ></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Отчет"></MenuItem>
+            </Menu>
+            <ToolBar x:Name="ToolBar1" Height="48" Width="476">
+                <Button x:Name="Undo" ToolTip="Отменить редактирование/создание" Command="Undo" Margin="5,2,5,2">
+                    <Image Source="Images/undo.png" />
+                </Button>
+                <Button x:Name="Add" ToolTip="Добавить" Margin="5,2,5,2">
+                    <Image Source="Images/add.png" />
+                </Button>
+                <Button x:Name="Edit" ToolTip="Изменить" Margin="5,2,5,2">
+                    <Image Source="Images/edit.png" />
+                </Button>
+                <Button x:Name="Open" ToolTip="Открыть" Margin="5,2,5,2">
+                    <Image Source="Images/open.png" />
+                </Button>
+                <Button x:Name="Save" ToolTip="Сохранить" Margin="5,2,5,2">
+                    <Image Source="Images/undo.png" />
+                </Button>
+                <Button x:Name="Delete" ToolTip="Удалить" Margin="5,2,5,2">
+                    <Image Source="Images/delete.png" />
+                </Button>
+            </ToolBar>
+            <TextBlock Margin="5" >Список сотрудников</TextBlock>
+            <DataGrid Name="DataGridEmployee" >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Фамилия"/>
+                    <DataGridTextColumn Header="Имя"/>
+                    <DataGridTextColumn Header="Отчество"/>
+                    <DataGridComboBoxColumn Header="Должность" />
+                    <DataGridTemplateColumn Header="Дата рождения" />
+                    <DataGridTextColumn Header="Телефон"/>
+                    <DataGridTextColumn Header="Электронная почта"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+    </Grid>
+</Page>
