@@ -33,7 +33,7 @@ CanExecute="EditCommandBinding_CanExecute" />
                 </MenuItem>
                 <MenuItem Header="Отчет"></MenuItem>
             </Menu>
-            <ToolBar x:Name="ToolBar1" Height="48" Width="476">
+            <ToolBar x:Name="ToolBar1" Height="35" Width="242" HorizontalAlignment="Left">
                 <Button x:Name="Undo" ToolTip="Отменить редактирование/создание" Command="Undo" Margin="5,2,5,2">
                     <Image Source="Images/undo.png" />
                 </Button>
@@ -47,13 +47,13 @@ CanExecute="EditCommandBinding_CanExecute" />
                     <Image Source="Images/open.png" />
                 </Button>
                 <Button x:Name="Save" ToolTip="Сохранить" Margin="5,2,5,2">
-                    <Image Source="Images/undo.png" />
+                    <Image Source="Images/save.png" />
                 </Button>
                 <Button x:Name="Delete" ToolTip="Удалить" Margin="5,2,5,2">
                     <Image Source="Images/delete.png" />
                 </Button>
             </ToolBar>
-            <TextBlock Margin="5" >Список сотрудников</TextBlock>
+            <TextBlock Margin="5" Height="22" >Список сотрудников</TextBlock>
             <DataGrid Name="DataGridEmployee" >
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Фамилия"/>
