@@ -7,7 +7,8 @@
       xmlns:command="clr-namespace:Wpf1.Commands"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="PageEmployee">
+      Title="PageEmployee"
+      Loaded="Page_Loaded">
 
 
     <Page.CommandBindings>
@@ -54,15 +55,38 @@ CanExecute="EditCommandBinding_CanExecute" />
                 </Button>
             </ToolBar>
             <TextBlock Margin="5" Height="22" >Список сотрудников</TextBlock>
-            <DataGrid Name="DataGridEmployee" >
+            <DataGrid Name="DataGridEmployee" 
+                    ItemsSource="{Binding}"
+                    AutoGenerateColumns="False"
+                    HorizontalAlignment="Left"
+                    MaxWidth="1000" MaxHeight="295"
+                    RowBackground="#FFE6D3EF"
+                    AlternatingRowBackground="#FC96CFD4"
+                    BorderBrush="#FF1F33EB"
+                    BorderThickness="3"
+                    IsReadOnly="True"
+                    RowHeight="25"
+                    Cursor="Hand"
+                    CanUserAddRows="False"
+                    CanUserDeleteRows="False">      
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Фамилия"/>
-                    <DataGridTextColumn Header="Имя"/>
-                    <DataGridTextColumn Header="Отчество"/>
+                    <DataGridTextColumn Header="Фамилия" 
+                                        Binding="{Binding Surname, Mode=TwoWay,
+                                        UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="Имя" 
+                                        Binding="{Binding Name, Mode=TwoWay,
+                                        UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="Отчество" 
+                                        Binding="{Binding Patronymic, Mode=TwoWay,
+                                        UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridComboBoxColumn Header="Должность" />
                     <DataGridTemplateColumn Header="Дата рождения" />
-                    <DataGridTextColumn Header="Телефон"/>
-                    <DataGridTextColumn Header="Электронная почта"/>
+                    <DataGridTextColumn Header="Телефон" 
+                                        Binding="{Binding Telephone, Mode=TwoWay,
+                                        UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="Электронная почта" 
+                                        Binding="{Binding Email, Mode=TwoWay,
+                                        UpdateSourceTrigger=PropertyChanged}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>

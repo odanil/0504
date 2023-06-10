@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Wpf1.Entities;
 
 namespace Wpf1
 {
@@ -20,11 +13,30 @@ namespace Wpf1
     /// </summary>
     public partial class PageEmployee : Page
     {
+
+        public static bd0604Entities DataEntitiesEmployee { get; set; }
+        public ObservableCollection<Employee> ListEmployee { get; }
+
         public PageEmployee()
         {
+            DataEntitiesEmployee = new bd0604Entities();
             InitializeComponent();
+            ListEmployee = new ObservableCollection<Employee>();
 
         }
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            var employees = DataEntitiesEmployee.Employee;
+            var queryEmployee = from employee in employees
+                                orderby employee.Surname
+                                select employee;
+            foreach (Employee emp in queryEmployee)
+            {
+                ListEmployee.Add(emp);
+            }
+            DataGridEmployee.ItemsSource = ListEmployee;
+        }
+
         private bool isDirty = true;
         private void UndoCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
@@ -34,6 +46,7 @@ namespace Wpf1
         private void EditCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = isDirty;
+
         }
         private void SaveCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
