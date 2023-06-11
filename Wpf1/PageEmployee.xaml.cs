@@ -13,7 +13,18 @@ namespace Wpf1
     /// </summary>
     public partial class PageEmployee : Page
     {
-
+        public class ListTitle : ObservableCollection<Title>
+        {
+            public ListTitle()
+            {
+                var titles = PageEmployee.DataEntitiesEmployee.Title;
+                var queryTitle = from title in titles select title;
+                foreach (Title titl in queryTitle)
+                {
+                    this.Add(titl);
+                }
+            }
+        }
         public static bd0604Entities DataEntitiesEmployee { get; set; }
         public ObservableCollection<Employee> ListEmployee { get; }
 
@@ -43,15 +54,23 @@ namespace Wpf1
             MessageBox.Show("Отмена");
             isDirty = true;
         }
-        private void EditCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void EditCommandBinding_Executed(object sender,ExecutedRoutedEventArgs e)
         {
-            e.CanExecute = isDirty;
-
+            DataGridEmployee.IsReadOnly = false;
+            DataGridEmployee.BeginEdit();
+            isDirty = false;
         }
-        private void SaveCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+
+        private void SaveCommandBinding_Executed(object sender,ExecutedRoutedEventArgs e)
+        {
+            DataEntitiesEmployee.SaveChanges();
+            isDirty = true;
+            DataGridEmployee.IsReadOnly = true;
+        }
+
+        private void EditCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = !isDirty;
         }
-
     }
 }

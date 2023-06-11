@@ -5,19 +5,34 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Wpf1"
       xmlns:command="clr-namespace:Wpf1.Commands"
+      xmlns:core ="clr-namespace:Wpf1.Model"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PageEmployee"
       Loaded="Page_Loaded">
 
-
+    <Page.Resources>
+        
+        <core:ListTitle x:Key="listTitle"/>
+        
+        <DataTemplate x:Key="DateTemplate" >
+            <TextBlock Text="{Binding BirthDate, StringFormat={}{0:dd\.}{0:MM\.}{0:yyyy}}" 
+                       VerticalAlignment="Center" HorizontalAlignment="Center" />
+        </DataTemplate>
+        <DataTemplate x:Key="EditingDateTemplate">
+            <DatePicker SelectedDate="{Binding BirthDate, Mode=TwoWay, 
+                        UpdateSourceTrigger=PropertyChanged}" />
+        </DataTemplate>
+        
+    </Page.Resources>
     <Page.CommandBindings>
-        <CommandBinding Command="Undo"
-Executed="UndoCommandBinding_Executed"
-CanExecute="EditCommandBinding_CanExecute" />
+        <CommandBinding Command="Undo" Executed="UndoCommandBinding_Executed"/> 
+        <!--CanExecute="EditCommandBinding_CanExecute"-->
+        <CommandBinding Command="{x:Static command:DataCommands.Edit}" Executed="EditCommandBinding_Executed"/>
+        <!--CanExecute="EditCommandBinding_CanExecute"-->
+        <CommandBinding Command="Save" Executed="SaveCommandBinding_Executed"/>
     </Page.CommandBindings>
-
-
+    
 
     <Grid>
         <StackPanel>
@@ -34,20 +49,20 @@ CanExecute="EditCommandBinding_CanExecute" />
                 </MenuItem>
                 <MenuItem Header="Отчет"></MenuItem>
             </Menu>
-            <ToolBar x:Name="ToolBar1" Height="35" Width="242" HorizontalAlignment="Left">
+            <ToolBar x:Name="ToolBar1" Height="52" Width="344" HorizontalAlignment="Left">
                 <Button x:Name="Undo" ToolTip="Отменить редактирование/создание" Command="Undo" Margin="5,2,5,2">
                     <Image Source="Images/undo.png" />
                 </Button>
                 <Button x:Name="Add" ToolTip="Добавить" Margin="5,2,5,2">
-                    <Image Source="Images/add.png" />
+                    <Image Source="Images/add.png"/>
                 </Button>
-                <Button x:Name="Edit" ToolTip="Изменить" Margin="5,2,5,2">
+                <Button x:Name="Edit" ToolTip="Изменить" Command="command:DataCommands.Edit" Margin="5,2,5,2">
                     <Image Source="Images/edit.png" />
                 </Button>
                 <Button x:Name="Open" ToolTip="Открыть" Margin="5,2,5,2">
                     <Image Source="Images/open.png" />
                 </Button>
-                <Button x:Name="Save" ToolTip="Сохранить" Margin="5,2,5,2">
+                <Button x:Name="Save" ToolTip="Сохранить" Command="Save" Margin="5,2,5,2">
                     <Image Source="Images/save.png" />
                 </Button>
                 <Button x:Name="Delete" ToolTip="Удалить" Margin="5,2,5,2">
@@ -68,25 +83,36 @@ CanExecute="EditCommandBinding_CanExecute" />
                     RowHeight="25"
                     Cursor="Hand"
                     CanUserAddRows="False"
-                    CanUserDeleteRows="False">      
+                    CanUserDeleteRows="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Фамилия" 
                                         Binding="{Binding Surname, Mode=TwoWay,
-                                        UpdateSourceTrigger=PropertyChanged}"/>
+                                        UpdateSourceTrigger=PropertyChanged}"
+                                        Width="*"/>
                     <DataGridTextColumn Header="Имя" 
                                         Binding="{Binding Name, Mode=TwoWay,
-                                        UpdateSourceTrigger=PropertyChanged}"/>
+                                        UpdateSourceTrigger=PropertyChanged}"
+                                        Width="*"/>
                     <DataGridTextColumn Header="Отчество" 
                                         Binding="{Binding Patronymic, Mode=TwoWay,
-                                        UpdateSourceTrigger=PropertyChanged}"/>
-                    <DataGridComboBoxColumn Header="Должность" />
-                    <DataGridTemplateColumn Header="Дата рождения" />
+                                        UpdateSourceTrigger=PropertyChanged}"
+                                        Width="*"/>
+                    <DataGridComboBoxColumn Header="Должность" 
+                                        ItemsSource="{Binding Source={StaticResource listTitle}}"
+                                        DisplayMemberPath="Title1"
+                                        SelectedValueBinding="{Binding Path=TitleID, Mode=TwoWay,
+                                        UpdateSourceTrigger=PropertyChanged}"
+                                        SelectedValuePath="ID" 
+                                        Width="*"/>
+                    <DataGridTemplateColumn x:Name="DGBirstDate" Header="Дата рождения" Width="*" CellTemplate="{StaticResource DateTemplate}" CellEditingTemplate="{StaticResource EditingDateTemplate}"></DataGridTemplateColumn>
                     <DataGridTextColumn Header="Телефон" 
                                         Binding="{Binding Telephone, Mode=TwoWay,
-                                        UpdateSourceTrigger=PropertyChanged}"/>
+                                        UpdateSourceTrigger=PropertyChanged}"
+                                        Width="*"/>
                     <DataGridTextColumn Header="Электронная почта" 
                                         Binding="{Binding Email, Mode=TwoWay,
-                                        UpdateSourceTrigger=PropertyChanged}"/>
+                                        UpdateSourceTrigger=PropertyChanged}"
+                                        Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>

@@ -20,7 +20,7 @@ namespace Wpf1.Entities
         public string Patronymic { get; set; }
         public string Telephone { get; set; }
         public string Email { get; set; }
-        public Nullable<System.DateTime> BirthDate { get; set; }
+        public System.DateTime BirthDate { get; set; }
         public int TitleID { get; set; }
     
         public virtual Title Title { get; set; }
