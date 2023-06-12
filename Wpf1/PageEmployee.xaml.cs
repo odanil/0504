@@ -98,6 +98,7 @@ namespace Wpf1
                     Patronymic = "Не задано",
                     Telephone = "Не задано",
                     Email = "Не задано",
+                    BirthDate = new DateTime(2023,1,1),
                     TitleID = 1
                     
                 };
