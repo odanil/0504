@@ -6,15 +6,16 @@
       xmlns:local="clr-namespace:Wpf1"
       xmlns:command="clr-namespace:Wpf1.Commands"
       xmlns:core ="clr-namespace:Wpf1.Model"
+      xmlns:rule="clr-namespace:Wpf1.ValidationRules"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="450"
       Title="PageEmployee"
-      Loaded="Page_Loaded">
+      Loaded="Page_Loaded" Width="900">
 
     <Page.Resources>
-        
+
         <core:ListTitle x:Key="listTitle"/>
-        
+
         <DataTemplate x:Key="DateTemplate" >
             <TextBlock Text="{Binding BirthDate, StringFormat={}{0:dd\.}{0:MM\.}{0:yyyy}}" 
                        VerticalAlignment="Center" HorizontalAlignment="Center" />
@@ -23,18 +24,19 @@
             <DatePicker SelectedDate="{Binding BirthDate, Mode=TwoWay, 
                         UpdateSourceTrigger=PropertyChanged}" />
         </DataTemplate>
-        
+
     </Page.Resources>
     <Page.CommandBindings>
-        <CommandBinding Command="Undo" Executed="UndoCommandBinding_Executed"/> 
+        <CommandBinding Command="Undo" Executed="UndoCommandBinding_Executed"/>
         <CommandBinding Command="{x:Static command:DataCommands.Edit}" Executed="EditCommandBinding_Executed"/>
         <CommandBinding Command="Save" Executed="SaveCommandBinding_Executed"/>
-        <CommandBinding Command="New" Executed="AddCommandBinding_Executed"/>
+        <CommandBinding Command="New" Executed="NewCommandBinding_Executed"/>
+        <CommandBinding Command="{x:Static command:DataCommands.Delete}" Executed="DeleteCommandBinding_Executed"/>
     </Page.CommandBindings>
-    
 
-    <Grid>
-        <StackPanel>
+
+    <Grid Background="White" Width="auto" Height="auto">
+        <StackPanel Grid.ColumnSpan="2">
             <Menu>
                 <MenuItem Header="Действие" BorderThickness="3">
                     <MenuItem Header="Отменить" Command="Undo"></MenuItem>
@@ -48,35 +50,70 @@
                 </MenuItem>
                 <MenuItem Header="Отчет"></MenuItem>
             </Menu>
-            <ToolBar x:Name="ToolBar1" Height="52" Width="344" HorizontalAlignment="Left">
-                <Button x:Name="Undo" ToolTip="Отменить редактирование/создание" Command="Undo" Margin="5,2,5,2">
-                    <Image Source="Images/undo.png" />
-                </Button>
-                <Button x:Name="Add" ToolTip="Добавить" Command="New" Margin="5,2,5,2">
-                    <Image Source="Images/add.png"/>
-                </Button>
-                <Button x:Name="Edit" ToolTip="Изменить" Command="command:DataCommands.Edit" Margin="5,2,5,2">
-                    <Image Source="Images/edit.png" />
-                </Button>
-                <Button x:Name="Open" ToolTip="Открыть" Margin="5,2,5,2">
-                    <Image Source="Images/open.png" />
-                </Button>
-                <Button x:Name="Save" ToolTip="Сохранить" Command="Save" Margin="5,2,5,2">
-                    <Image Source="Images/save.png" />
-                </Button>
-                <Button x:Name="Delete" ToolTip="Удалить" Margin="5,2,5,2">
-                    <Image Source="Images/delete.png" />
-                </Button>
-            </ToolBar>
-            <TextBlock Margin="5" Height="22" >Список сотрудников</TextBlock>
-            <DataGrid Name="DataGridEmployee" 
+            <Grid Height="112">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="201*"/>
+                    <ColumnDefinition Width="199*"/>
+                </Grid.ColumnDefinitions>
+                <ToolBar x:Name="ToolBar1" Width="344" HorizontalAlignment="Left" Grid.Column="0" Margin="0,30,0,30">
+                    <Button x:Name="Undo" ToolTip="Отменить редактирование/создание" Command="Undo" Margin="5,2,5,2">
+                        <Image Source="Images/undo.png" />
+                    </Button>
+                    <Button x:Name="Add" ToolTip="Добавить" Command="New" Margin="5,2,5,2">
+                        <Image Source="Images/add.png"/>
+                    </Button>
+                    <Button x:Name="Edit" ToolTip="Изменить" Command="command:DataCommands.Edit" Margin="5,2,5,2">
+                        <Image Source="Images/edit.png" />
+                    </Button>
+                    <Button x:Name="Open" ToolTip="Открыть" Margin="5,2,5,2">
+                        <Image Source="Images/open.png" />
+                    </Button>
+                    <Button x:Name="Save" ToolTip="Сохранить" Command="Save" Margin="5,2,5,2">
+                        <Image Source="Images/save.png" />
+                    </Button>
+                    <Button x:Name="Delete" ToolTip="Удалить" Command="command:DataCommands.Delete" Margin="5,2,5,2">
+                        <Image Source="Images/delete.png" />
+                    </Button>
+                </ToolBar>
+
+                <Border Name="BorderFind" BorderBrush="Purple" BorderThickness="1" Width="350" HorizontalAlignment="Left" Grid.Column="1" Margin="0,6,0,6">
+                    <Grid HorizontalAlignment="Center" Width="350" Margin="0,-1,0,-1" Background="AliceBlue" Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="24"/>
+                            <RowDefinition Height="41*"/>
+                            <RowDefinition Height="45*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="82*"/>
+                            <ColumnDefinition Width="221*"/>
+                            <ColumnDefinition Width="38*"/>
+                            <ColumnDefinition Width="9*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Поиск" Grid.Column="1" Margin="68,0,75,0" />
+                        <Label Content="Фамилия" Grid.Row="1" Margin="0,0,0,39" Grid.RowSpan="2"/>
+                        <Label Content="Должность" Grid.Row="2"/>
+                        <TextBox Name="TextBoxSurname" TextChanged="TextBoxSurname_TextChanged" Grid.Column="1" Grid.Row="1" Margin="16,5,10,10"/>
+                        <ComboBox Grid.Row="2" Margin="16,10,10,10" SelectionChanged="ComboBoxTitle_SelectionChanged" Grid.Column="1" Name="ComboBoxTitle" ItemsSource="{Binding Source={StaticResource listTitle}}" DisplayMemberPath="Title1"/>
+                        <Button Name="FindSurname" IsEnabled="True" ToolTip="Поиск по фамилии" Click="FindSurname_Click" Width="auto" Height="auto" Grid.Column="2" Grid.Row="1" Background="AliceBlue" Margin="0,2,0,4" >
+                            <Image Source="Images/find.png" Height="30" Width="24"/>
+                        </Button>
+                        <Button Name="FindTitle" IsEnabled="True"  ToolTip="Поиск по должности" Click="FindTitle_Click" Grid.Column="2" Grid.Row="2" Width="auto" Height="auto" Background="AliceBlue" Margin="0,5,0,3">
+                            <Image Source="Images/find.png" Height="30" Width="24"/>
+                        </Button>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <TextBlock Margin="5" Height="22" Width="auto" HorizontalAlignment="Left" >Список сотрудников</TextBlock>
+            <DataGrid Name="DataGridEmployee"
+                    Grid.Column="0"
                     ItemsSource="{Binding}"
                     AutoGenerateColumns="False"
                     HorizontalAlignment="Left"
                     MaxWidth="1000" MaxHeight="295"
                     RowBackground="#FFE6D3EF"
                     AlternatingRowBackground="#FC96CFD4"
-                    BorderBrush="#FF1F33EB"
+                    BorderBrush="Purple"
                     BorderThickness="3"
                     IsReadOnly="True"
                     RowHeight="25"
@@ -103,15 +140,22 @@
                                         UpdateSourceTrigger=PropertyChanged}"
                                         SelectedValuePath="ID" 
                                         Width="*"/>
-                    <DataGridTemplateColumn x:Name="DGBirstDate" Header="Дата рождения" Width="*" CellTemplate="{StaticResource DateTemplate}" CellEditingTemplate="{StaticResource EditingDateTemplate}"></DataGridTemplateColumn>
+                    <DataGridTemplateColumn x:Name="DGBirstDate" Header="Дата рождения" Width="100" CellTemplate="{StaticResource DateTemplate}" CellEditingTemplate="{StaticResource EditingDateTemplate}"></DataGridTemplateColumn>
                     <DataGridTextColumn Header="Телефон" 
                                         Binding="{Binding Telephone, Mode=TwoWay,
                                         UpdateSourceTrigger=PropertyChanged}"
                                         Width="*"/>
-                    <DataGridTextColumn Header="Электронная почта" 
-                                        Binding="{Binding Email, Mode=TwoWay,
-                                        UpdateSourceTrigger=PropertyChanged}"
-                                        Width="*"/>
+                    <DataGridTextColumn Header="Электронная почта"
+                                        Width="*"
+                                        EditingElementStyle="{StaticResource errorStyle}">
+                        <DataGridTextColumn.Binding >
+                            <Binding Path = "Email" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" >
+                                <Binding.ValidationRules>
+                                    <rule:EmailRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </DataGridTextColumn.Binding >
+                    </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>
