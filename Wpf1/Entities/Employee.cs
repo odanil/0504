@@ -11,7 +11,10 @@ namespace Wpf1.Entities
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Data.Entity;
+    using System.Data.Entity.Migrations.Model;
+    using System.Runtime.CompilerServices;
+
     public partial class Employee
     {
         public int ID { get; set; }
@@ -24,5 +27,10 @@ namespace Wpf1.Entities
         public int TitleID { get; set; }
     
         public virtual Title Title { get; set; }
+        //public Create(ID, FN, Name, Patr)
+        //{
+        //    return Employee;
+        //}
+
     }
 }

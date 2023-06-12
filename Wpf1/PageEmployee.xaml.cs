@@ -1,11 +1,24 @@
-﻿using System.Collections.ObjectModel;
-using System.Data.Entity.Core.Objects;
+﻿using System;
+using Microsoft.Win32;
+using System.Collections.Generic;
+using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Wpf1.Entities;
-
+using System.IO;
+using System.Security.Policy;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 namespace Wpf1
 {
     /// <summary>
@@ -54,16 +67,17 @@ namespace Wpf1
             MessageBox.Show("Отмена");
             isDirty = true;
         }
-        private void EditCommandBinding_Executed(object sender,ExecutedRoutedEventArgs e)
+        private void EditCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             DataGridEmployee.IsReadOnly = false;
             DataGridEmployee.BeginEdit();
             isDirty = false;
         }
 
-        private void SaveCommandBinding_Executed(object sender,ExecutedRoutedEventArgs e)
+        private void SaveCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             DataEntitiesEmployee.SaveChanges();
+            App.Context.SaveChanges();
             isDirty = true;
             DataGridEmployee.IsReadOnly = true;
         }
@@ -71,6 +85,38 @@ namespace Wpf1
         private void EditCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = !isDirty;
+        }
+
+        private void AddCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            {
+                var employees = new Employee
+                {
+                    ID = -1,
+                    Surname = "Не задано",
+                    Name = "Не задано",
+                    Patronymic = "Не задано",
+                    Telephone = "Не задано",
+                    Email = "Не задано",
+                    TitleID = 1
+                    
+                };
+                App.Context.Employee.Add(employees);
+                try
+                {
+                    ListEmployee.Add(employees);
+                    DataGridEmployee.ScrollIntoView(employees);
+                    DataGridEmployee.SelectedIndex = DataGridEmployee.Items.Count - 1;
+                    DataGridEmployee.Focus();
+                    DataGridEmployee.IsReadOnly = false;
+                    isDirty = false;
+                }
+                catch (Exception ex)
+                {
+                    throw new ApplicationException("Ошибка добавления нового сотрудника в контекст данных" + ex.ToString());
+                }
+            }
+
         }
     }
 }

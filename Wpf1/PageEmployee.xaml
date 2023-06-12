@@ -27,10 +27,9 @@
     </Page.Resources>
     <Page.CommandBindings>
         <CommandBinding Command="Undo" Executed="UndoCommandBinding_Executed"/> 
-        <!--CanExecute="EditCommandBinding_CanExecute"-->
         <CommandBinding Command="{x:Static command:DataCommands.Edit}" Executed="EditCommandBinding_Executed"/>
-        <!--CanExecute="EditCommandBinding_CanExecute"-->
         <CommandBinding Command="Save" Executed="SaveCommandBinding_Executed"/>
+        <CommandBinding Command="New" Executed="AddCommandBinding_Executed"/>
     </Page.CommandBindings>
     
 
@@ -53,7 +52,7 @@
                 <Button x:Name="Undo" ToolTip="Отменить редактирование/создание" Command="Undo" Margin="5,2,5,2">
                     <Image Source="Images/undo.png" />
                 </Button>
-                <Button x:Name="Add" ToolTip="Добавить" Margin="5,2,5,2">
+                <Button x:Name="Add" ToolTip="Добавить" Command="New" Margin="5,2,5,2">
                     <Image Source="Images/add.png"/>
                 </Button>
                 <Button x:Name="Edit" ToolTip="Изменить" Command="command:DataCommands.Edit" Margin="5,2,5,2">

@@ -13,5 +13,7 @@ namespace Wpf1
     /// </summary>
     public partial class App : Application
     {
+        public static Entities.bd0604Entities Context
+        { get; } = new Entities.bd0604Entities();
     }
 }
